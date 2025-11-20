@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+kingdom_state.json
+.env
+posts_for_scheduler.csv
+posts.csv
