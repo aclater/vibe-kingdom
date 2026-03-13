@@ -17,14 +17,13 @@ The goal is not generic “content marketing,” but an honest, slightly vain, a
 - 🧠 Uses an LLM to generate LinkedIn-style post drafts in your voice
 - ✅ Simple CLI workflow: `draft` → `approved` → `exported`
 - 📦 Exports approved posts as CSV for use with Buffer/Hootsuite/etc.
-- ⚙️ Two engines:
-  - `kingdom_local.py` – talk to a **local** OpenAI-compatible LLM (RamaLama, etc.)
-  - `kingdom_cloud.py` – talk to the **OpenAI API** directly
+- ⚙️ Two engines via a single script and `--engine` flag:
+  - `--engine cloud` – OpenAI API (default)
+  - `--engine local` – local OpenAI-compatible LLM (RamaLama, etc.)
 
 ## Repo Layout
 
-- `kingdom_local.py` – core engine using a local OpenAI-compatible endpoint (e.g. RamaLama)
-- `kingdom_cloud.py` – same idea, but using the official OpenAI API
+- `kingdom.py` – the unified CLI engine (supports both cloud and local LLMs)
 - `rss_feeds.txt` – one RSS URL per line; this is your signal input
 - `kingdom_state.json` – state file (created at runtime) with ideas + posts
 - `.env.example` – example env file for OpenAI API & local LLM settings
@@ -77,13 +76,13 @@ The goal is not generic “content marketing,” but an honest, slightly vain, a
 5. **Run the pipeline**:
 
    ```bash
-   chmod +x kingdom_local.py
+   chmod +x kingdom.py
 
-   ./kingdom_local.py fetch-news
-   ./kingdom_local.py generate-posts --count 6
-   ./kingdom_local.py list-posts --status draft
-   ./kingdom_local.py set-status 1 approved
-   ./kingdom_local.py export-csv --outfile posts_for_scheduler.csv
+   ./kingdom.py --engine local fetch-news
+   ./kingdom.py --engine local generate-posts --count 6
+   ./kingdom.py list-posts --status draft
+   ./kingdom.py set-status 1 approved
+   ./kingdom.py export-csv --outfile posts_for_scheduler.csv
    ```
 
    Import the CSV into your social scheduler of choice or just copy/paste.
@@ -102,16 +101,16 @@ If you want to use OpenAI’s hosted models instead of a local one:
    pip install -U openai feedparser python-dotenv
    ```
 
-4. Run:
+4. Run (cloud is the default engine, so no flag needed):
 
    ```bash
-   chmod +x kingdom_cloud.py
+   chmod +x kingdom.py
 
-   ./kingdom_cloud.py fetch-news
-   ./kingdom_cloud.py generate-posts --count 6
-   ./kingdom_cloud.py list-posts --status draft
-   ./kingdom_cloud.py set-status 1 approved
-   ./kingdom_cloud.py export-csv --outfile posts_for_scheduler.csv
+   ./kingdom.py fetch-news
+   ./kingdom.py generate-posts --count 6
+   ./kingdom.py list-posts --status draft
+   ./kingdom.py set-status 1 approved
+   ./kingdom.py export-csv --outfile posts_for_scheduler.csv
    ```
 
 ---
@@ -126,7 +125,7 @@ Both engines use an internal “Constitution” to steer the LLM:
 - No emojis or hashtags unless you explicitly ask for them
 - Posts are LinkedIn-length (roughly 80–220 words)
 
-You can customize this by editing the `CONSTITUTION` string in the scripts.
+You can customize this by editing the `CONSTITUTION` string in `kingdom.py`.
 
 ---
 
