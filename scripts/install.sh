@@ -7,12 +7,11 @@ source venv/bin/activate
 
 echo "Installing dependencies..."
 pip install --upgrade pip
-pip install feedparser python-dotenv requests openai
+pip install feedparser python-dotenv openai
 
 echo
 echo "Done."
 echo "To use:"
 echo "  source venv/bin/activate"
-echo "  ./kingdom_local.py fetch-news"
-echo "or:"
-echo "  ./kingdom_cloud.py fetch-news"
+echo "  ./kingdom.py fetch-news                   # cloud (OpenAI API)"
+echo "  ./kingdom.py --engine local fetch-news    # local LLM (RamaLama, etc.)"
